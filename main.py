@@ -26,7 +26,7 @@ async def handler(websocket, path):
         await asyncio.sleep(0.8)
         await send_status(websocket, "SessionAssignment", match_id=match_id)
         await asyncio.sleep(4)
-await send_play(websocket, match_id, session_id)
+
 
 async def send_status(websocket, state, **kwargs):
     message = {
@@ -39,13 +39,14 @@ async def send_status(websocket, state, **kwargs):
         message = {
             "payload": {
                 "MatchId": match_id,
-             "sessionId": session_id
-            "joinDelaySec": 0
+             "sessionId": session_id,
+            "joinDelaySec": 0,
             },
             "name": "Play"
         }
         await websocket.send(json.dumps(message))
         async def main():
+            await send_play(websocket, match_id, session_id)
             port = 80
             server = await websockets.serve(handle_connection, "0.0.0.0", port)
             print(Fore.GREEN + f"MatchmakerPY started listening on {port}")
